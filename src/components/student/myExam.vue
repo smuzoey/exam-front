@@ -13,7 +13,7 @@
           <h4 @click="toExamMsg(item.examCode)">{{item.source}}</h4>
           <p class="name">{{item.source}}-{{item.description}}</p>
           <div class="info">
-            <i class="el-icon-loading"></i><span>{{item.examDate.substr(0,10)}}</span>
+            <i class="iconfont icon-icon-time"></i><span>{{item.examDate.substr(0,10)}}</span>
             <i class="iconfont icon-icon-time"></i><span v-if="item.totalTime != null">限时{{item.totalTime}}分钟</span>
             <i class="iconfont icon-fenshu"></i><span>满分{{item.totalScore}}分</span>
           </div>
@@ -54,7 +54,7 @@ export default {
     this.loading = true
   },
   // watch: {
-    
+
   // },
   methods: {
     //获取当前所有考试信息
@@ -62,7 +62,6 @@ export default {
       this.$axios(`/api/exams/${this.pagination.current}/${this.pagination.size}`).then(res => {
         this.pagination = res.data.data
         this.loading = false
-        console.log(this.pagination)
       }).catch(error => {
         console.log(error)
       })
@@ -101,15 +100,15 @@ export default {
 <style lang="scss" scoped>
 .pagination {
   padding: 20px 0px 30px 0px;
-  .el-pagination {
-    display: flex;
-    justify-content: center;
-  }
+.el-pagination {
+  display: flex;
+  justify-content: center;
+}
 }
 .paper {
-  h4 {
-    cursor: pointer;
-  }
+h4 {
+  cursor: pointer;
+}
 }
 .paper .item a {
   color: #000;

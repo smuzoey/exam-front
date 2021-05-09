@@ -219,20 +219,40 @@
         </div>
       </section>
     </el-tab-pane>
+
     <el-tab-pane name="second">
       <span slot="label"><i class="iconfont icon-daoru-tianchong"></i>在线组卷</span>
       <div class="box">
         <ul>
+
           <li>
-            <span>试题难度:</span>
-            <el-select v-model="difficultyValue" placeholder="试题难度" class="w150">
+            <span>科目:</span>
+            <el-select v-model="subjectValue" placeholder="科目" class="w150" style="width:120px;">
               <el-option
-                v-for="item in difficulty"
+                v-for="item in subjectGroup"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
+
+            <span> 知识点:</span>
+
+            <el-select v-model="point" placeholder="知识点" class="w150" multiple style="width:600px;">
+              <el-option
+                v-for="item in pointGroup"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+
+          </li>
+          <li>
+            <span>难度：</span> <el-input type="text" placeholder="0.3~0.9" style="width:130px;" v-model="difficult"></el-input>
+          </li>
+          <li>
+            <span>总分：</span> <el-input type="text" v-model="total"></el-input>
           </li>
           <li>
             <span>选择题数量：</span> <el-input type="text" v-model="changeNumber"></el-input>
@@ -257,10 +277,41 @@
 export default {
   data() {
     return {
+      total:null,
+      difficult:null,
       changeNumber: null, //选择题出题数量
       fillNumber: null, //填空题出题数量
       judgeNumber: null, //判断题出题数量
-      activeName: 'first',  //活动选项卡
+      activeName: 'first',  //活动选项
+      point:[],
+      subjectGroup:[
+        {
+          value:'计算机网络',
+          label:'计算机网络',
+        }
+      ],
+      pointGroup:[
+        {
+          value:'物理层',
+          label:'物理层',
+        },
+        {
+          value:'数据链路层',
+          label:'数据链路层',
+        },
+        {
+          value:'网络层',
+          label:'网络层',
+        },
+        {
+          value:'传输层',
+          label:'传输层',
+        },
+        {
+          value:'应用层',
+          label:'应用层',
+        }
+      ],
       options: [ //题库类型
         {
           value: '选择题',
@@ -290,6 +341,7 @@ export default {
         }
       ],
       difficultyValue: '简单',
+      subjectValue: '计算机网络',
       levels: [ //难度等级
         {
           value: '1',
@@ -335,7 +387,7 @@ export default {
       subject: '', //试卷名称用来接收路由参数
       postChange: { //选择题提交内容
         subject: '', //试卷名称
-        level: '', //难度等级选中值 
+        level: '', //难度等级选中值
         rightAnswer: '', //正确答案选中值
         section: '', //对应章节
         question: '', //题目
@@ -347,7 +399,7 @@ export default {
       },
       postFill: { //填空题提交内容
         subject: '', //试卷名称
-        level: '', //难度等级选中值 
+        level: '', //难度等级选中值
         answer: '', //正确答案
         section: '', //对应章节
         question: '', //题目
@@ -355,7 +407,7 @@ export default {
       },
       postJudge: { //判断题提交内容
         subject: '', //试卷名称
-        level: '', //难度等级选中值 
+        level: '', //难度等级选中值
         answer: '', //正确答案
         section: '', //对应章节
         question: '', //题目
@@ -380,10 +432,13 @@ export default {
         url: '/api/item',
         method: 'post',
         data: {
-          changeNumber: this.changeNumber,
-          fillNumber: this.fillNumber,
-          judgeNumber: this.judgeNumber,
+          changeNumber: this.changeNumber*1,
+          fillNumber: this.fillNumber*1,
+          judgeNumber: this.judgeNumber*1,
           paperId: this.paperId,
+          point:this.point,
+          total:this.total*1,
+          difficult:this.difficult*1,
           subject: '计算机网络' //题目数量太少，指定为计算机网络出题
         }
       }).then(res => {
@@ -419,7 +474,7 @@ export default {
         url: '/api/MultiQuestion',
         method: 'post',
         data: {
-          ...this.postChange          
+          ...this.postChange
         }
       }).then(res => { //添加成功显示提示
         let status = res.data.code
@@ -584,7 +639,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-      }        
+      }
     }
     .fill {
       .fillAnswer {

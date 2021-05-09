@@ -5,6 +5,9 @@
       <el-form-item label="姓名">
         <el-input v-model="form.studentName"></el-input>
       </el-form-item>
+      <el-form-item label="学号">
+        <el-input v-model="form.studentId"></el-input>
+      </el-form-item>
       <el-form-item label="性别">
         <el-input v-model="form.sex"></el-input>
       </el-form-item>
@@ -46,6 +49,7 @@ export default {
     return {
       form: { //表单数据初始化
         studentName: null,
+        studentId:null,
         grade: null,
         major: null,
         clazz: null,
@@ -80,7 +84,7 @@ export default {
     cancel() { //取消按钮
       this.form = {}
     },
-    
+
   }
 };
 </script>

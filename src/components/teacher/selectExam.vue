@@ -111,6 +111,7 @@ export default {
     },
     submit() { //提交修改后的试卷信息
       this.dialogVisible = false
+      this.form.totalScore = this.form.totalScore*1
       this.$axios({
         url: '/api/exam',
         method: 'put',

@@ -75,6 +75,8 @@ export default {
     onSubmit() {
       let examDate = this.formatTime(this.form.examDate)
       this.form.examDate = examDate.substr(0,10)
+      this.form.totalTime = this.form.totalTime*1
+      this.form.totalScore = this.form.totalScore*1
       this.$axios(`/api/examManagePaperId`).then(res => {
         this.form.paperId = res.data.data.paperId + 1 //实现paperId自增1
         this.$axios({
@@ -97,7 +99,7 @@ export default {
     cancel() { //取消按钮
       this.form = {}
     },
-    
+
   }
 };
 </script>

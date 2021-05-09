@@ -12,7 +12,7 @@
             <p class="title">账号登录</p>
             <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
               <el-form-item label="用户名">
-                <el-input v-model.number="formLabelAlign.username" placeholder="请输入用户名"></el-input>
+                <el-input v-model="formLabelAlign.username" placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="密码">
                 <el-input v-model="formLabelAlign.password" placeholder="请输入密码" type='password'></el-input>
@@ -56,8 +56,8 @@ export default {
       role: 2,
       labelPosition: 'left',
       formLabelAlign: {
-        username: '20154084',
-        password: '123456'
+        username: null,
+        password: null
       }
     }
   },
@@ -69,27 +69,33 @@ export default {
         url: `/api/login`,
         method: 'post',
         data: {
-          ...this.formLabelAlign
-        }
+          username: this.formLabelAlign.username+'',
+          password: this.formLabelAlign.password
+        },
+        header:{'Content-Type':'application/x-www-form-urlencoded'}
       }).then(res=>{
-        let resData = res.data.data
+        //debugger;
+        console.log('res~')
+        let resData = res.data.data || { };
         if(resData != null) {
+          console.log("<<<<<<<<resData", resData)
           switch(resData.role) {
-            case "0":  //管理员
+            case 0:  //管理员
               this.$cookies.set("cname", resData.adminName)
               this.$cookies.set("cid", resData.adminId)
               this.$cookies.set("role", 0)
               this.$router.push({path: '/index' }) //跳转到首页
               break
-            case "1": //教师
+            case 1: //教师
               this.$cookies.set("cname", resData.teacherName)
               this.$cookies.set("cid", resData.teacherId)
               this.$cookies.set("role", 1)
               this.$router.push({path: '/index' }) //跳转到教师用户
               break
-            case "2": //学生
+            case 2: //学生
               this.$cookies.set("cname", resData.studentName)
               this.$cookies.set("cid", resData.studentId)
+              this.$cookies.set("role", 2)
               this.$router.push({path: '/student'})
               break
           }
